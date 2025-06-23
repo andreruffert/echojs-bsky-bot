@@ -1,0 +1,35 @@
+name: bsky-bot
+on:
+  #schedule:
+    # This will run every 60 minutes.
+    #- cron: '*/60 * * * *'
+  workflow_dispatch: # This allows manually running the workflow from the GitHub actions page
+concurrency:
+  group: bsky-bot
+jobs:
+  rss-to-bluesky:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+      - name: Generate cache key
+        uses: actions/github-script@v6
+        id: generate-key
+        with:
+          script: |
+            core.setOutput('cache-key', new Date().valueOf())
+      - name: Retrieve cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ github.workspace }}/bsky-bot
+          key: feed-cache-${{ steps.generate-key.outputs.cache-key }}
+          restore-keys: feed-cache-
+      - name: Install dependencies
+        run: npm ci
+      - name: Run bot
+        run: npm start -- --rss-feed='https://echojs.com/rss' --cache-file='${{ github.workspace }}/bsky-bot/cache.json'
+        env: 
+          BSKY_SERVICE: https://bsky.social
+          BSKY_HANDLE: ${{ vars.BSKY_HANDLE }}
+          BSKY_PASSWORD: ${{ secrets.BSKY_PASSWORD }} 
