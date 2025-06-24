@@ -29,7 +29,7 @@ jobs:
           restore-keys: feed-cache-
       - name: Install dependencies
         run: npm ci
-      - name: Run bot
+      - name: Post to Bluesky
         run: npm start -- --rss-feed='https://echojs.com/rss' --cache-file='${{ github.workspace }}/bsky-bot/cache.json'
         env:
           BSKY_SERVICE: https://bsky.social
