@@ -22,7 +22,7 @@ jobs:
           script: |
             core.setOutput('cache-key', new Date().valueOf())
       - name: Retrieve cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ github.workspace }}/bsky-bot
           key: feed-cache-${{ steps.generate-key.outputs.cache-key }}
