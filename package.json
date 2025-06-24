@@ -25,6 +25,7 @@
   "dependencies": {
     "@atproto/api": "0.15.16",
     "fast-xml-parser": "5.2.5",
+    "sharp": "0.34.2",
     "url-metadata": "5.2.1",
     "zod": "3.25.67"
   },
