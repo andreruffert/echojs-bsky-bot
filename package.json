@@ -30,6 +30,6 @@
     "zod": "4.0.17"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.0.6"
+    "@biomejs/biome": "2.2.0"
   }
 }
