@@ -26,7 +26,7 @@
     "@atproto/api": "0.16.0",
     "fast-xml-parser": "5.3.0",
     "sharp": "0.34.4",
-    "url-metadata": "5.2.2",
+    "url-metadata": "5.2.3",
     "zod": "4.1.11"
   },
   "devDependencies": {
