@@ -27,7 +27,7 @@
     "fast-xml-parser": "5.3.0",
     "sharp": "0.34.4",
     "url-metadata": "5.2.3",
-    "zod": "4.1.11"
+    "zod": "4.1.12"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.4"
