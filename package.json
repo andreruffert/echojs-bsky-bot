@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/andreruffert/echojs-bsky-bot#readme",
   "dependencies": {
-    "@atproto/api": "0.16.0",
+    "@atproto/api": "0.18.21",
     "fast-xml-parser": "5.3.3",
     "sharp": "0.34.5",
     "url-metadata": "5.4.1",
