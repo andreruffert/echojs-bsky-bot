@@ -13,7 +13,7 @@ import Bot from './lib/bot.js';
  */
 
 /**
- * Parse CLI arguments using Node 18+ `parseArgs`
+ * Parse CLI arguments
  * @returns {CLIOptions}
  */
 function parseCLIArgs() {
@@ -35,7 +35,7 @@ function parseCLIArgs() {
     cacheLimit: Number(values['cache-limit']),
     initialPostLimit: Number(values['initial-post-limit']),
     postLimit: Number(values['post-limit']),
-    dryRun: values['dry-run'] === true || values['dry-run'] === 'true',
+    dryRun: values['dry-run'],
   };
 }
 
