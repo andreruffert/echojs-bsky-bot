@@ -1,35 +1,66 @@
-name: bsky-bot
+name: Bluesky RSS Bot
 on:
   schedule:
     # Run every 3 hours.
     - cron: '0 */3 * * *'
   workflow_dispatch: # This allows manually running the workflow from the GitHub actions page
+    inputs:
+      rss-feed:
+        description: 'RSS feed URL'
+        required: true
+        default: 'https://echojs.com/rss'
+      dry-run:
+        description: 'Dry run mode'
+        required: false
+        default: 'false'
+
 concurrency:
   group: bsky-bot
+  cancel-in-progress: true
+
 jobs:
   rss-to-bluesky:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v6
-      - name: Use Node.js
+      - name: Checkout repo
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
         uses: actions/setup-node@v6
-      - name: Generate cache key
-        uses: actions/github-script@v8
-        id: generate-key
         with:
-          script: |
-            core.setOutput('cache-key', new Date().valueOf())
-      - name: Retrieve cache
+          node-version: '22'
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+
+      - name: Cache bot folder
         uses: actions/cache@v5
         with:
-          path: ${{ github.workspace }}/bsky-bot
-          key: feed-cache-${{ steps.generate-key.outputs.cache-key }}
-          restore-keys: feed-cache-
+          path: ${{ github.workspace }}/.bsky-bot
+          key: bot-cache
+          restore-keys: bot-cache
+
       - name: Install dependencies
         run: npm ci
-      - name: Post to Bluesky
-        run: npm start -- --rss-feed='https://echojs.com/rss' --cache-file='${{ github.workspace }}/bsky-bot/cache.json'
+
+      - name: Post new RSS items to Bluesky
+        run: |
+          node index.js \
+            --rss-feed="${{ github.event.inputs.rss-feed }}" \
+            --cache-file="${{ github.workspace }}/.bsky-bot/cache.json" \
+            --dry-run=${{ github.event.inputs.dry-run }}
         env:
           BSKY_SERVICE: https://bsky.social
           BSKY_HANDLE: ${{ vars.BSKY_HANDLE }}
           BSKY_PASSWORD: ${{ secrets.BSKY_PASSWORD }}
+
+      - name: Save updated bot cache for the next run
+        uses: actions/cache@v3
+        with:
+          path: ${{ github.workspace }}/.bsky-bot
+          key: bot-cache
