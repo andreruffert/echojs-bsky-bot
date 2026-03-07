@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "private": true,
   "scripts": {
     "dev": "node --env-file=.env ./index.js",
     "start": "node ./index.js",
@@ -14,9 +15,11 @@
     "type": "git",
     "url": "git+https://github.com/andreruffert/echojs-bsky-bot.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "André Ruffert",
+    "url": "https://andreruffert.com"
+  },
+  "license": "MIT",
   "type": "module",
   "bugs": {
     "url": "https://github.com/andreruffert/echojs-bsky-bot/issues"
