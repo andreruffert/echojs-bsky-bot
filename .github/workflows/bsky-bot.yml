@@ -13,6 +13,10 @@ on:
         description: 'Dry run mode'
         required: false
         default: 'false'
+        type: choice
+        options:
+          - "false"
+          - "true"
 
 concurrency:
   group: bsky-bot
@@ -50,10 +54,15 @@ jobs:
 
       - name: Post new RSS items to Bluesky
         run: |
+          DRY_RUN_FLAG=""
+          if [ "${{ github.event.inputs.dry-run }}" = "true" ]; then
+            DRY_RUN_FLAG="--dry-run"
+          fi
+
           node index.js \
             --rss-feed="${{ github.event.inputs.rss-feed }}" \
             --cache-file="${{ github.workspace }}/.bsky-bot/cache.json" \
-            --dry-run=${{ github.event.inputs.dry-run }}
+            $DRY_RUN_FLAG
         env:
           BSKY_SERVICE: https://bsky.social
           BSKY_HANDLE: ${{ vars.BSKY_HANDLE }}
