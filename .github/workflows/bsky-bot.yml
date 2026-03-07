@@ -5,9 +5,6 @@ on:
     - cron: '0 */3 * * *'
   workflow_dispatch: # This allows manually running the workflow from the GitHub actions page
     inputs:
-      rss-feed:
-        description: 'RSS feed URL'
-        required: true
       dry-run:
         description: 'Dry run mode'
         required: false
@@ -66,7 +63,6 @@ jobs:
       - name: Post new RSS items to Bluesky
         run: |
           node index.js \
-            --rss-feed="${{ github.event.inputs.rss-feed || env.RSS_FEED }}" \
             --cache-file="${{ github.workspace }}/.bsky-bot/cache.json" \
             ${{ github.event.inputs.dry-run == 'true' && '--dry-run' || '' }} \
             ${{ github.event.inputs['populate-cache'] == 'true' && '--populate-cache' || '' }}
