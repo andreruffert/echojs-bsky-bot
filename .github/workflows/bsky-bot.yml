@@ -8,9 +8,17 @@ on:
       rss-feed:
         description: 'RSS feed URL'
         required: true
-        default: 'https://echojs.com/rss'
+        default: ${{ vars.RSS_FEED }}
       dry-run:
         description: 'Dry run mode'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - "false"
+          - "true"
+      populate-cache:
+        description: 'Populate cache without posting'
         required: false
         default: 'false'
         type: choice
@@ -58,16 +66,13 @@ jobs:
 
       - name: Post new RSS items to Bluesky
         run: |
-          DRY_RUN_FLAG=""
-          if [ "${{ github.event.inputs.dry-run }}" = "true" ]; then
-            DRY_RUN_FLAG="--dry-run"
-          fi
-
           node index.js \
-            --rss-feed="${{ github.event.inputs.rss-feed }}" \
+            --rss-feed="${{ github.event.inputs.rss-feed || env.RSS_FEED }}" \
             --cache-file="${{ github.workspace }}/.bsky-bot/cache.json" \
-            $DRY_RUN_FLAG
+            ${{ github.event.inputs.dry-run == 'true' && '--dry-run' || '' }} \
+            ${{ github.event.inputs['populate-cache'] == 'true' && '--populate-cache' || '' }}
         env:
-          BSKY_SERVICE: https://bsky.social
           BSKY_HANDLE: ${{ vars.BSKY_HANDLE }}
           BSKY_PASSWORD: ${{ secrets.BSKY_PASSWORD }}
+          BSKY_SERVICE: https://bsky.social
+          RSS_FEED: ${{ vars.RSS_FEED }}
