@@ -40,7 +40,7 @@ jobs:
           node-version: '22'
 
       - name: Cache node modules
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
@@ -50,7 +50,7 @@ jobs:
         run: mkdir -p .bsky-bot
 
       - name: Restore rolling bot cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: .bsky-bot
           key: bsky-bot-${{ github.run_id }}
