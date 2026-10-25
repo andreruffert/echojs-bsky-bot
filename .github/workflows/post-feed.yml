@@ -1,0 +1,48 @@
+name: Post feed
+on:
+  schedule:
+    # Run every 3 hours.
+    - cron: '0 */3 * * *'
+  # Allow manually running the workflow from the GitHub actions page
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: 'Dry run mode'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - "false"
+          - "true"
+      populate-cache:
+        description: 'Populate cache without posting'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26
+          cache: npm
+      - uses: actions/cache@v7
+        with:
+          path: .bsky-rss-bot
+          key: bsky-rss-bot-${{ github.run_id }}
+          restore-keys: bsky-rss-bot-
+      - run: npm ci
+      - run: |
+          node index.js \
+            ${{ github.event.inputs.dry-run == 'true' && '--dry-run' || '' }} \
+            ${{ github.event.inputs['populate-cache'] == 'true' && '--populate-cache' || '' }}
+        env:
+          BSKY_HANDLE: ${{ vars.BSKY_HANDLE }}
+          BSKY_PASSWORD: ${{ secrets.BSKY_PASSWORD }}
+          RSS_FEED: ${{ vars.RSS_FEED }}
