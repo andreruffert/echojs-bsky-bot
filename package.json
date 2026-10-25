@@ -1,36 +1,17 @@
 {
   "name": "echojs-bsky-bot",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "node --env-file=.env ./index.js",
     "start": "node ./index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "biome ci",
-    "format": "biome check --write"
+    "format": "biome check --write --unsafe"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/andreruffert/echojs-bsky-bot.git"
-  },
-  "author": {
-    "name": "André Ruffert",
-    "url": "https://andreruffert.com"
-  },
-  "license": "MIT",
-  "type": "module",
-  "bugs": {
-    "url": "https://github.com/andreruffert/echojs-bsky-bot/issues"
-  },
-  "homepage": "https://github.com/andreruffert/echojs-bsky-bot#readme",
   "dependencies": {
-    "@atproto/api": "0.19.0",
-    "fast-xml-parser": "5.11.1",
-    "sharp": "0.35.4",
-    "url-metadata": "5.10.0",
-    "zod": "4.6.5"
+    "bsky-rss-bot": "0.1.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.6"
