@@ -32,7 +32,7 @@ jobs:
         with:
           node-version: 26
           cache: npm
-      - uses: actions/cache@v7
+      - uses: actions/cache@v6.1.0
         with:
           path: .bsky-rss-bot
           key: bsky-rss-bot-${{ github.run_id }}
